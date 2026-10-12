@@ -1,0 +1,152 @@
+@startuml casos_uso
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+left to right direction
+actor "Solicitante" as Sol
+actor "Voluntário" as Vol
+actor "Administrador" as Adm
+Vol <|-- Adm
+rectangle "Sistema Compartilha+" {
+  usecase "Autenticar-se" as UC1
+  usecase "Recuperar senha" as UC2
+  usecase "Consultar produtos\ndisponíveis" as UC3
+  usecase "Registrar solicitação" as UC4
+  usecase "Acompanhar minhas\nsolicitações" as UC5
+  usecase "Cadastrar doador\ne solicitante" as UC6
+  usecase "Registrar doação" as UC7
+  usecase "Controlar estoque\ne validade" as UC8
+  usecase "Descartar vencidos" as UC9
+  usecase "Avaliar solicitações\n(fila)" as UC10
+  usecase "Emitir relatórios" as UC11
+  usecase "Gerenciar usuários" as UC12
+  usecase "Restaurar backup" as UC13
+  usecase "Baixar estoque\npor validade (PVPS)" as UC14
+}
+Sol --> UC1
+Sol --> UC2
+Sol --> UC3
+Sol --> UC4
+Sol --> UC5
+Vol --> UC1
+Vol --> UC4
+Vol --> UC6
+Vol --> UC7
+Vol --> UC8
+Vol --> UC9
+Adm --> UC10
+Adm --> UC11
+Adm --> UC12
+Adm --> UC13
+UC10 ..> UC14 : <<include>>
+@enduml
+
+@startuml seq_doacao
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+actor "Voluntário" as V
+participant "telas.py" as T
+participant "servicos.py" as S
+participant "dados.py" as D
+database "base.json" as B
+V -> T : Registrar doação (opção 4)
+T -> V : lista de doadores
+V -> T : doador, categoria, nome,\nquantidade, validade, lote
+T -> S : registrar_doacao(...)
+alt validade ausente ou vencida
+  S --> T : RegraNegocioErro
+  T --> V : mensagem de erro
+else dados válidos
+  S -> S : criar lote e\nregistrar_movimentacao("entrada")
+  S --> T : produto, movimentação
+  T -> D : salvar(base)
+  D -> B : gravar JSON
+  D -> D : fazer_backup()
+  T -> T : empilhar ação (pilha)
+  T --> V : "Doação registrada"
+end
+@enduml
+
+@startuml seq_avaliacao
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+actor "Administrador" as A
+participant "telas.py" as T
+participant "servicos.py" as S
+participant "estruturas.py" as E
+participant "dados.py" as D
+A -> T : Avaliar solicitações (opção 8)
+T -> S : fila_pendentes(base)
+S -> E : merge_sort(solicitações, data)
+S -> E : Fila.enfileirar(id) [pendentes]
+S --> T : fila
+T --> A : exibe fila e a primeira solicitação
+A -> T : Aprovar
+T -> S : avaliar_solicitacao(id, aprovar=True)
+S -> S : confere se id é o primeiro da fila
+S -> E : merge_sort(lotes, validade)
+alt saldo suficiente
+  loop para cada lote (vence primeiro)
+    S -> S : baixar quantidade e\nregistrar saída
+  end
+  S -> E : Fila.desenfileirar()
+  S --> T : solicitação aprovada
+  T -> D : salvar(base) + backup
+  T --> A : "Solicitação aprovada"
+else saldo insuficiente
+  S --> T : RegraNegocioErro
+  T --> A : "Estoque insuficiente"
+end
+@enduml
+
+@startuml classes_estruturas
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+skinparam classAttributeIconSize 0
+hide circle
+class Fila {
+  - _itens : list
+  + enfileirar(item)
+  + desenfileirar()
+  + primeiro()
+  + vazia() : bool
+  + tamanho() : int
+}
+class Pilha {
+  - _itens : list
+  - _limite : int
+  + empilhar(item)
+  + desempilhar()
+  + topo()
+  + itens() : list
+}
+class ArvoreBST {
+  + raiz : NoArvore
+  + inserir(chave, valor)
+  + buscar(chave) : list
+  + em_ordem() : list
+  + buscar_prefixo(prefixo) : list
+  + altura() : int
+}
+class NoArvore {
+  + chave : str
+  + valores : list
+  + esquerda : NoArvore
+  + direita : NoArvore
+}
+ArvoreBST o-- "0..1" NoArvore : raiz
+NoArvore o-- "0..2" NoArvore : filhos
+@enduml
