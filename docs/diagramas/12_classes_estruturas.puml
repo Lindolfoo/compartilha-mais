@@ -1,0 +1,42 @@
+@startuml 12_classes_estruturas
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+skinparam classAttributeIconSize 0
+hide circle
+class Fila {
+  - _itens : list
+  + enfileirar(item)
+  + desenfileirar()
+  + primeiro()
+  + vazia() : bool
+  + tamanho() : int
+}
+class Pilha {
+  - _itens : list
+  - _limite : int
+  + empilhar(item)
+  + desempilhar()
+  + topo()
+  + itens() : list
+}
+class ArvoreBST {
+  + raiz : NoArvore
+  + inserir(chave, valor)
+  + buscar(chave) : list
+  + em_ordem() : list
+  + buscar_prefixo(prefixo) : list
+  + altura() : int
+}
+class NoArvore {
+  + chave : str
+  + valores : list
+  + esquerda : NoArvore
+  + direita : NoArvore
+}
+ArvoreBST o-- "0..1" NoArvore : raiz
+NoArvore o-- "0..2" NoArvore : filhos
+@enduml

@@ -1,0 +1,35 @@
+@startuml 09_sequencia_avaliacao
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+actor "Administrador" as A
+participant "telas.py" as T
+participant "servicos.py" as S
+participant "estruturas.py" as E
+participant "dados.py" as D
+A -> T : Avaliar solicitações (opção 8)
+T -> S : fila_pendentes(base)
+S -> E : merge_sort(solicitações, data)
+S -> E : Fila.enfileirar(id) [pendentes]
+S --> T : fila
+T --> A : exibe fila e a primeira solicitação
+A -> T : Aprovar
+T -> S : avaliar_solicitacao(id, aprovar=True)
+S -> S : confere se id é o primeiro da fila
+S -> E : merge_sort(lotes, validade)
+alt saldo suficiente
+  loop para cada lote (vence primeiro)
+    S -> S : baixar quantidade e\nregistrar saída
+  end
+  S -> E : Fila.desenfileirar()
+  S --> T : solicitação aprovada
+  T -> D : salvar(base) + backup
+  T --> A : "Solicitação aprovada"
+else saldo insuficiente
+  S --> T : RegraNegocioErro
+  T --> A : "Estoque insuficiente"
+end
+@enduml

@@ -1,0 +1,45 @@
+@startuml 03_casos_de_uso
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+left to right direction
+actor "Solicitante" as Sol
+actor "Voluntário" as Vol
+actor "Administrador" as Adm
+Vol <|-- Adm
+rectangle "Sistema Compartilha+" {
+  usecase "Autenticar-se" as UC1
+  usecase "Recuperar senha" as UC2
+  usecase "Consultar produtos\ndisponíveis" as UC3
+  usecase "Registrar solicitação" as UC4
+  usecase "Acompanhar minhas\nsolicitações" as UC5
+  usecase "Cadastrar doador\ne solicitante" as UC6
+  usecase "Registrar doação" as UC7
+  usecase "Controlar estoque\ne validade" as UC8
+  usecase "Descartar vencidos" as UC9
+  usecase "Avaliar solicitações\n(fila)" as UC10
+  usecase "Emitir relatórios" as UC11
+  usecase "Gerenciar usuários" as UC12
+  usecase "Restaurar backup" as UC13
+  usecase "Baixar estoque\npor validade (PVPS)" as UC14
+}
+Sol --> UC1
+Sol --> UC2
+Sol --> UC3
+Sol --> UC4
+Sol --> UC5
+Vol --> UC1
+Vol --> UC4
+Vol --> UC6
+Vol --> UC7
+Vol --> UC8
+Vol --> UC9
+Adm --> UC10
+Adm --> UC11
+Adm --> UC12
+Adm --> UC13
+UC10 ..> UC14 : <<include>>
+@enduml

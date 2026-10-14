@@ -1,0 +1,25 @@
+@startuml 06_fluxograma_doacao
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+start
+:Selecionar doador;
+if (Doador existe?) then (Não)
+  :Exibir erro;
+  stop
+endif
+:Ler categoria, nome, quantidade, unidade e peso;
+if (Categoria exige validade? (RN01)) then (Sim)
+  repeat
+    :Ler validade (obrigatória);
+  repeat while (Validade < hoje? (RN02)) is (Sim, recusar)
+else (Não)
+  :Ler validade (opcional);
+endif
+:Criar lote, registrar movimentação de entrada,
+gravar e fazer backup;
+:Empilhar ação (permite desfazer);
+stop
+@enduml

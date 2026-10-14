@@ -1,0 +1,41 @@
+@startwbs 04_dhf
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+* SISTEMA COMPARTILHA+
+** 1 Acesso
+*** 1.1 Autenticar usuário
+*** 1.2 Bloquear após 3 tentativas
+*** 1.3 Recuperar senha
+*** 1.4 Alterar senha
+** 2 Cadastros
+*** 2.1 Doadores
+*** 2.2 Solicitantes
+*** 2.3 Funcionários e voluntários
+*** 2.4 Desbloquear usuário
+** 3 Estoque
+*** 3.1 Registrar doação
+*** 3.2 Listar estoque
+*** 3.3 Busca com filtros
+*** 3.4 Alertas de validade
+*** 3.5 Descartar vencidos
+*** 3.6 Desfazer última doação
+** 4 Solicitações
+*** 4.1 Registrar solicitação
+*** 4.2 Fila de avaliação (aprovar/reprovar)
+*** 4.3 Baixa por validade (PVPS)
+*** 4.4 Minhas solicitações
+** 5 Relatórios
+*** 5.1 Entradas e saídas
+*** 5.2 Mais solicitados
+*** 5.3 Doações por doador
+*** 5.4 Doações por mês
+*** 5.5 Indicadores
+*** 5.6 Histórico por solicitante
+** 6 Sistema
+*** 6.1 Gravação em arquivo
+*** 6.2 Backup automático
+*** 6.3 Restaurar backup
+@endwbs

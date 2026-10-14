@@ -1,0 +1,24 @@
+@startuml 31_fluxograma_telaSaida_c
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+start
+:Ler código do produto;
+if (buscarPorCodigo() encontrou e ativo?) then (Não)
+  :Exibir "Produto não encontrado";
+elseif (vencido(p)?) then (Sim)
+  :Exibir "Produto vencido não pode ser entregue";
+elseif (quantidade == 0?) then (Sim)
+  :Exibir "Produto sem saldo";
+else (Não)
+  :Ler quantidade (1 até o saldo);
+  :p->quantidade -= qtd
+  registrarMovimento('S')
+  salvarDados();
+  :Exibir novo saldo;
+endif
+:pausar();
+stop
+@enduml

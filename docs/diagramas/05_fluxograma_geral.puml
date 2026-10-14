@@ -1,0 +1,36 @@
+@startuml 05_fluxograma_geral
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+start
+:Carregar base (dados/base.json);
+if (Existe usuário cadastrado?) then (Não)
+  :Cadastrar administrador;
+else (Sim)
+endif
+repeat
+  :Ler login e senha;
+  if (Senha confere?) then (Sim)
+    break
+  else (Não)
+    :Somar tentativa;
+    if (Tentativas = 3?) then (Sim)
+      :Bloquear usuário;
+      stop
+    else (Não)
+    endif
+  endif
+repeat while (nova tentativa)
+repeat
+  :Exibir menu conforme o perfil do usuário;
+  :Ler opção;
+  if (Opção = Sair?) then (Sim)
+    stop
+  endif
+  :Executar a tela escolhida
+  (cadastro, estoque, fila, relatório, backup);
+  :Gravar base e gerar backup;
+repeat while (continuar)
+@enduml

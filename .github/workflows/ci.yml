@@ -1,0 +1,33 @@
+name: Testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    name: Python ${{ matrix.python }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+        python: ["3.8", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Testes automatizados
+        working-directory: python
+        run: python -m unittest discover -s testes -v
+
+  c:
+    name: Versão em C (gcc, sem avisos)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar com todos os avisos tratados como erro
+        working-directory: c
+        run: gcc -std=c99 -Wall -Wextra -pedantic -Werror main.c util.c estoque.c -o compartilha

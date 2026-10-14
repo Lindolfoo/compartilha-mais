@@ -1,0 +1,27 @@
+@startuml 11_arquitetura_modulos
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+rectangle "main.py\n(início e login)" as main
+rectangle "telas.py\n(telas e menus por perfil)" as telas
+rectangle "servicos.py\n(regras de negócio)" as srv
+rectangle "interface.py\n(tela, leitura, datas, tabelas)" as ui
+rectangle "seguranca.py\n(hash, login, recuperação)" as seg
+rectangle "estruturas.py\n(fila, pilha, árvore,\nmerge sort, busca binária)" as est
+rectangle "dados.py\n(JSON e backup)" as dados
+database "dados/base.json\ndados/backup/" as db
+main --> telas
+main --> seg
+main --> dados
+telas --> srv
+telas --> ui
+telas --> seg
+telas --> dados
+srv --> ui
+srv --> est
+srv --> dados
+dados --> db
+@enduml
