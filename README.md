@@ -1,3 +1,25 @@
-# Farmácia Solidária – Projeto Integrado Multidisciplinar(PIM)
-Este projeto foi desenvolvido como parte de um Projeto Integrador, a partir de um problema levantado em sala de aula relacionado à dificuldade de controle e organização de medicamentos doados em iniciativas comunitárias. A proposta é criar uma solução simples e funcional que auxilie no gerenciamento desses medicamentos, aplicando na prática conceitos de programação e organização de sistemas.
-Atualmente, o sistema foi desenvolvido em Python e funciona via terminal (CLI), contando com controle de acesso por login de administrador e persistência de dados em banco de dados MySQL. O projeto permite o cadastro e a listagem de medicamentos, com validações importantes como duplicidade, quantidade e padronização da data de validade. O código foi estruturado de forma modular, separando autenticação, regras de negócio e acesso ao banco de dados, preparando a aplicação para futuras evoluções, como a criação de uma interface web com Flask e a implementação de novas funcionalidades.
+# Compartilha+ — Gestão de Produtos Colaborativos
+
+Projeto Integrado Multidisciplinar II — CST em Análise e Desenvolvimento de Sistemas (UNIP).
+
+Sistema para iniciativas de doação de produtos (alimentos, higiene, medicamentos,
+brinquedos e vestuário): cadastro de doadores, solicitantes e voluntários; controle
+de estoque com alertas de validade; fila justa de solicitações com aprovação;
+relatórios e backup automático.
+
+| Pasta     | Conteúdo                                              |
+|-----------|-------------------------------------------------------|
+| `python/` | Sistema completo em Python 3 (ver `python/README.md`) |
+| `c/`      | Versão complementar em C99 (ver `c/README.md`)        |
+| `docs/`   | Diagramas (fontes PlantUML)                           |
+
+## Execução rápida
+```bash
+cd python && python main.py --demo      # login: admin / admin123
+cd c && gcc -std=c99 main.c util.c estoque.c -o compartilha && ./compartilha
+```
+
+## Fluxo de trabalho no Git
+- `main`: versão estável, só recebe merges revisados.
+- `feature/<nome>`: uma branch por item do Product Backlog, integrada por pull request.
+- Mensagens de commit no padrão `tipo: descrição` (feat, fix, test, docs, chore).
