@@ -6,7 +6,7 @@ Os dados são gravados em arquivos binários (`produtos.dat` e `movimentos.dat`)
 
 ## Compilar e executar
 ```bash
-gcc -std=c99 -Wall main.c util.c estoque.c -o compartilha
+gcc -std=c99 -Wall -Wextra -pedantic main.c util.c estoque.c -o compartilha
 ./compartilha            # Linux/macOS
 compartilha.exe          # Windows
 ```
