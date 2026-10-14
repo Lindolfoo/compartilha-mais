@@ -1,0 +1,29 @@
+@startuml 08_sequencia_doacao
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+actor "Voluntário" as V
+participant "telas.py" as T
+participant "servicos.py" as S
+participant "dados.py" as D
+database "base.json" as B
+V -> T : Registrar doação (opção 4)
+T -> V : lista de doadores
+V -> T : doador, categoria, nome,\nquantidade, validade, lote
+T -> S : registrar_doacao(...)
+alt validade ausente ou vencida
+  S --> T : RegraNegocioErro
+  T --> V : mensagem de erro
+else dados válidos
+  S -> S : criar lote e\nregistrar_movimentacao("entrada")
+  S --> T : produto, movimentação
+  T -> D : salvar(base)
+  D -> B : gravar JSON
+  D -> D : fazer_backup()
+  T -> T : empilhar ação (pilha)
+  T --> V : "Doação registrada"
+end
+@enduml

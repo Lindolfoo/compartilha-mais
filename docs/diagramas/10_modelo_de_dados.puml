@@ -1,0 +1,56 @@
+@startuml 10_modelo_de_dados
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+hide circle
+skinparam linetype ortho
+entity usuarios {
+  id
+  nome, login
+  senha_hash, sal
+  perfil
+  pergunta, resposta_hash
+  {field} pessoa_id (opcional)
+  tentativas, bloqueado
+}
+entity pessoas {
+  id
+  nome, documento
+  telefone, email
+  {field} tipo (doador | solicitante)
+  cadastro
+}
+entity "produtos (lotes)" as produtos {
+  id
+  nome, categoria
+  quantidade, unidade, peso_kg
+  validade, lote
+  doador_id
+  entrada, descartado
+}
+entity movimentacoes {
+  id
+  data
+  {field} tipo (entrada | saida | descarte)
+  produto_id, quantidade
+  usuario_id, pessoa_id
+  solicitacao_id
+}
+entity solicitacoes {
+  id
+  data, solicitante_id
+  produto, quantidade
+  justificativa
+  {field} status (pendente | aprovada | reprovada)
+  avaliador_id, data_avaliacao, motivo
+}
+pessoas |o..o| usuarios : acesso (0..1)
+pessoas ||--o{ produtos : doa
+pessoas ||--o{ solicitacoes : solicita
+usuarios ||--o{ movimentacoes : registra
+produtos ||--o{ movimentacoes : movimenta
+solicitacoes |o--o{ movimentacoes : gera saídas
+@enduml

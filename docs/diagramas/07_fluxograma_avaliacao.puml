@@ -1,0 +1,33 @@
+@startuml 07_fluxograma_avaliacao
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+start
+:Montar fila com as solicitações pendentes
+(ordenadas por data);
+while (Fila vazia?) is (Não)
+  :Exibir primeira solicitação da fila;
+  switch (Decisão do administrador)
+  case (Aprovar)
+    :Ordenar lotes válidos do produto por validade
+    (merge sort – PVPS);
+    if (Saldo dos lotes ≥ quantidade pedida?) then (Sim)
+      :Para cada lote: retirar min(falta, saldo do lote)
+      e registrar saída;
+      :Status = aprovada;
+    else (Não)
+      :Exibir "Estoque insuficiente";
+      detach
+    endif
+  case (Reprovar)
+    :Ler motivo da reprovação (RN06);
+    :Status = reprovada;
+  case (Voltar)
+    stop
+  endswitch
+  :Remover da fila e gravar a base;
+endwhile (Sim)
+stop
+@enduml

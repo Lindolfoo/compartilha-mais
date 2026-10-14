@@ -1,0 +1,27 @@
+@startuml 38_arquitetura_rede
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 13
+skinparam dpi 200
+left to right direction
+rectangle "Unidades de atendimento" {
+  node "Unidade Centro\n(cliente: terminal\nou navegador)" as c1
+  node "Unidade Bairro\n(cliente)" as c2
+  node "Celular do\nsolicitante" as c3
+}
+rectangle "Servidor central" {
+  node "API REST\n(regras de negócio de\nservicos.py)" as api
+  database "Banco de dados\nrelacional" as bd
+  node "Módulo de previsão\nde demanda (IA)" as ia
+  database "Backup\nexterno" as bk
+}
+c1 --> api : HTTPS (TLS)
+c2 --> api : HTTPS (TLS)
+c3 --> api : HTTPS (TLS)
+api --> bd
+bd --> ia : histórico
+ia --> api : previsões
+bd --> bk : rotina diária
+@enduml
